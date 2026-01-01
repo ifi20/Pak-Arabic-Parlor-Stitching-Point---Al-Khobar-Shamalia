@@ -1,5 +1,5 @@
 [
-  { "category": "Manicure & Pedicure", "service": "Light Manicure", "old": 870 },
+  { "category": "Manicure & Pedicure", "service": "Light Manicure", "old": 60 },
   { "category": "Manicure & Pedicure", "service": "Special Manicure", "old": 70 },
   { "category": "Manicure & Pedicure", "service": "Regular Manicure", "old": 50 },
   { "category": "Manicure & Pedicure", "service": "Nail Cut & Filing (Hands)", "old": 20 },
@@ -79,4 +79,5 @@
   { "category": "Extra Items", "service": "Herbal Skin Whitening Botanic Mask (per pack)", "old": 20 },
   { "category": "Extra Items", "service": "Full Body Massage", "old": 150 },
   { "category": "Extra Items", "service": "All Face Problems Whitening Cream", "old": 20 }
+
 ]
