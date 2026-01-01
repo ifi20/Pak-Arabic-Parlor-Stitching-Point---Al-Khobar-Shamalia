@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // --- 🔧 SETTINGS ---
   const settings = {
-    discountPercentage: 20,
+    discountPercentage: 25,
     whatsappNumber: "966582617487",
     currency: "SAR"
   };
@@ -235,4 +235,5 @@ document.addEventListener("DOMContentLoaded", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
+
 });
