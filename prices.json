@@ -27,6 +27,7 @@
   { "category": "Facial & Skin Treatments", "service": "Skin Lightening Pack", "old": 130 },
   { "category": "Facial & Skin Treatments", "service": "Clean & Glow 24K Whitening Gold Facial", "old": 120 },
   { "category": "Facial & Skin Treatments", "service": "Christine Whitening Facial", "old": 100 },
+      { "category": "Facial & Skin Treatments", "service": " Face IT Whitening Facial", "old": 175 },
   { "category": "Facial & Skin Treatments", "service": "B-Cute Facial", "old": 130 },
   { "category": "Facial & Skin Treatments", "service": "Gold Series Facial", "old": 140 },
   { "category": "Facial & Skin Treatments", "service": "Doctor Derma Facial", "old": 140 },
@@ -79,5 +80,8 @@
   { "category": "Extra Items", "service": "Herbal Skin Whitening Botanic Mask (per pack)", "old": 20 },
   { "category": "Extra Items", "service": "Full Body Massage", "old": 150 },
   { "category": "Extra Items", "service": "All Face Problems Whitening Cream", "old": 20 }
-
+  { "category": "Extra Items", "service": "All Transportation Charges", "old": 53.33 }
+  
+  
 ]
+
