@@ -1,87 +1,111 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // --- 🔧 SETTINGS ---
+
+  /* =====================
+     🔧 GLOBAL SETTINGS
+  ====================== */
   const settings = {
     discountPercentage: 25,
     whatsappNumber: "966582617487",
     currency: "SAR"
   };
 
-  // --- 1. SETUP PAGE ---
+  /* =====================
+     🎉 OFFER BANNER
+  ====================== */
   const banner = document.querySelector(".banner");
   const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
-  
   if (banner) {
     banner.textContent = `✨ ${currentMonth} Glow Offer – ${settings.discountPercentage}% OFF All Services! ✨`;
   }
 
-  // --- ⏰ CLOCK FIX: 12-Hour Format ---
-  // Added 'hour12: true' to ensure AM/PM display
+  /* =====================
+     ⏰ LIVE CLOCK (12-Hour)
+  ====================== */
   setInterval(() => {
     const clock = document.getElementById("currentDateTime");
-    if(clock) {
+    if (clock) {
       clock.textContent = new Date().toLocaleString("en-US", {
-        weekday: "long", year: "numeric", month: "long", day: "numeric", 
-        hour: "numeric", minute: "2-digit", second: "2-digit",
-        hour12: true  // <--- Forces 12-hour format
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
       });
     }
   }, 1000);
 
-  // --- 2. FETCH & RENDER SERVICES ---
-  fetch("prices.json")
-    .then(response => {
-      if (!response.ok) throw new Error("Network response was not ok");
-      return response.json();
+  /* =====================
+     📦 FETCH SERVICES
+  ====================== */
+  fetch("./prices.json")
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to load prices.json");
+      return res.json();
     })
     .then(data => renderServices(data))
-    .catch(error => {
-      console.error("Error fetching services:", error);
+    .catch(err => {
+      console.error(err);
       const list = document.getElementById("serviceList");
-      if(list) {
-        list.innerHTML = 
-          `<div class="box" style="text-align:center; color:red;">
-             <h3>Error Loading Services</h3>
-             <p>Could not load <b>prices.json</b>. Make sure it is in the same folder.</p>
-           </div>`;
-      }
       const hint = document.getElementById("jsonHint");
-      if(hint) hint.style.display = "block";
+      if (list) {
+        list.innerHTML = `
+          <div class="box" style="color:red;text-align:center">
+            <h3>Error Loading Services</h3>
+            <p>prices.json could not be loaded.</p>
+          </div>`;
+      }
+      if (hint) hint.style.display = "block";
     });
 
+  /* =====================
+     🧾 RENDER SERVICES
+  ====================== */
   function renderServices(services) {
     const container = document.getElementById("serviceList");
     const categoryFilter = document.getElementById("categoryFilter");
-    if(!container) return;
+    if (!container || !categoryFilter) return;
+
+    container.innerHTML = "";
+    categoryFilter.innerHTML = `<option value="all">All Categories</option>`;
 
     const categories = {};
+
     services.forEach(item => {
-      const cat = item.category.trim(); 
+      const cat = item.category.trim();
       if (!categories[cat]) categories[cat] = [];
       categories[cat].push(item);
     });
 
-    for (const [categoryName, items] of Object.entries(categories)) {
+    Object.entries(categories).forEach(([category, items]) => {
       const section = document.createElement("section");
-      section.className = "box"; 
-      section.dataset.category = categoryName;
+      section.className = "box";
+      section.dataset.category = category;
 
       const title = document.createElement("h3");
-      title.textContent = categoryName;
+      title.textContent = category;
       section.appendChild(title);
 
       items.forEach(service => {
-        const newPrice = Math.round(service.old * (1 - settings.discountPercentage / 100));
+        const discounted = Math.round(
+          service.old * (1 - settings.discountPercentage / 100)
+        );
+
         const label = document.createElement("label");
         label.className = "service";
+        label.style.cursor = "pointer";
+
         label.innerHTML = `
           ${service.service}
           <span class="price">
             <span class="old">${service.old} ${settings.currency}</span>
-            <span class="new">${newPrice} ${settings.currency}</span>
-            <input type="checkbox" 
-                   value="${newPrice}" 
-                   data-name="${service.service}" 
-                   data-category="${categoryName}">
+            <span class="new">${discounted} ${settings.currency}</span>
+            <input type="checkbox"
+              value="${discounted}"
+              data-name="${service.service}"
+              data-category="${category}">
           </span>
         `;
         section.appendChild(label);
@@ -89,149 +113,145 @@ document.addEventListener("DOMContentLoaded", () => {
 
       container.appendChild(section);
 
-      if(categoryFilter) {
-        const option = document.createElement("option");
-        option.value = categoryName;
-        option.textContent = categoryName;
-        categoryFilter.appendChild(option);
-      }
-    }
-    attachInteractionListeners();
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+    });
+
+    attachInteractions();
   }
 
-  // --- 3. INTERACTION LOGIC ---
-  function attachInteractionListeners() {
+  /* =====================
+     🧠 INTERACTIONS
+  ====================== */
+  function attachInteractions() {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     const totalSpan = document.getElementById("total");
     const searchInput = document.getElementById("searchInput");
-    const clearSearchBtn = document.getElementById("clearSearch");
+    const clearSearch = document.getElementById("clearSearch");
     const categoryFilter = document.getElementById("categoryFilter");
-    
-    checkboxes.forEach(box => {
-      box.addEventListener("change", () => {
-        const total = Array.from(checkboxes)
+
+    // Total calculation
+    checkboxes.forEach(cb => {
+      cb.addEventListener("change", () => {
+        const total = [...checkboxes]
           .filter(c => c.checked)
           .reduce((sum, c) => sum + Number(c.value), 0);
-        if(totalSpan) totalSpan.textContent = total;
+        if (totalSpan) totalSpan.textContent = total;
       });
     });
 
-    if(searchInput) {
-      searchInput.addEventListener("input", (e) => {
+    // Search
+    if (searchInput) {
+      searchInput.addEventListener("input", e => {
         const term = e.target.value.toLowerCase();
-        if(clearSearchBtn) clearSearchBtn.style.display = term ? "block" : "none";
+        clearSearch.style.display = term ? "block" : "none";
+
         document.querySelectorAll(".service").forEach(row => {
-          const text = row.textContent.toLowerCase();
-          row.style.display = text.includes(term) ? "flex" : "none";
+          row.style.display = row.textContent.toLowerCase().includes(term)
+            ? "flex"
+            : "none";
         });
       });
     }
 
-    if(clearSearchBtn) {
-      clearSearchBtn.addEventListener("click", () => {
+    if (clearSearch) {
+      clearSearch.addEventListener("click", () => {
         searchInput.value = "";
-        clearSearchBtn.style.display = "none";
-        document.querySelectorAll(".service").forEach(row => row.style.display = "flex");
+        clearSearch.style.display = "none";
+        document.querySelectorAll(".service").forEach(row => {
+          row.style.display = "flex";
+        });
       });
     }
 
-    if(categoryFilter) {
-      categoryFilter.addEventListener("change", (e) => {
-        const selected = e.target.value;
+    // Category filter
+    if (categoryFilter) {
+      categoryFilter.addEventListener("change", e => {
+        const selected = e.target.value.toLowerCase();
         document.querySelectorAll(".box[data-category]").forEach(box => {
-          if (selected === "all" || box.dataset.category === selected) {
-            box.style.display = "block";
-          } else {
-            box.style.display = "none";
-          }
+          const cat = box.dataset.category.toLowerCase();
+          box.style.display =
+            selected === "all" || cat === selected ? "block" : "none";
         });
       });
     }
   }
 
-  // --- 4. BUTTONS ---
-  const clearBtn = document.getElementById("clear");
-  if(clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-      const name = document.getElementById("customerName");
-      const time = document.getElementById("customerTime");
-      const total = document.getElementById("total");
-      const summ = document.getElementById("summaryArea");
-      
-      if(name) name.value = "";
-      if(time) time.value = "";
-      if(total) total.textContent = "0";
-      if(summ) summ.hidden = true;
-    });
-  }
+  /* =====================
+     🔄 CLEAR BUTTON
+  ====================== */
+  document.getElementById("clear")?.addEventListener("click", () => {
+    document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+    document.getElementById("customerName").value = "";
+    document.getElementById("customerTime").value = "";
+    document.getElementById("total").textContent = "0";
+    document.getElementById("summaryArea").hidden = true;
+    document.getElementById("summaryText").innerHTML = "No summary yet.";
+  });
 
-  const locBtn = document.getElementById("locationBtn");
-  if(locBtn) {
-    locBtn.addEventListener("click", () => {
-      window.open("https://goo.gl/maps/ttfrKNCARaquVyWb9", "_blank"); 
-    });
-  }
+  /* =====================
+     📍 LOCATION
+  ====================== */
+  document.getElementById("locationBtn")?.addEventListener("click", () => {
+    window.open("https://goo.gl/maps/ttfrKNCARaquVyWb9", "_blank");
+  });
 
-  const summaryBtn = document.getElementById("summary");
-  if(summaryBtn) {
-    summaryBtn.addEventListener("click", () => {
-      const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
-      if (selected.length === 0) return alert("Please select at least one service!");
+  /* =====================
+     🧾 SUMMARY
+  ====================== */
+  document.getElementById("summary")?.addEventListener("click", () => {
+    const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')];
+    if (!selected.length) return alert("Please select at least one service.");
 
-      const name = document.getElementById("customerName").value || "Valued Customer";
-      const time = document.getElementById("customerTime").value || "No time selected";
-      const total = document.getElementById("total").textContent;
-      const listHtml = selected.map(c => `<li>${c.dataset.name} - <b>${c.value} ${settings.currency}</b></li>`).join("");
-      const summaryText = document.getElementById("summaryText");
-      const summaryArea = document.getElementById("summaryArea");
-      
-      if(summaryText) {
-        summaryText.innerHTML = `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Time:</strong> ${time}</p>
-          <ul>${listHtml}</ul>
-          <p><strong>Total:</strong> ${total} ${settings.currency}</p>
-        `;
-      }
-      if(summaryArea) {
-        summaryArea.hidden = false;
-        summaryArea.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  }
+    const name = document.getElementById("customerName").value || "Valued Customer";
+    const timeValue = document.getElementById("customerTime").value;
+    const time = timeValue
+      ? new Date(timeValue).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+      : "Not selected";
+    const total = document.getElementById("total").textContent;
 
-  const sendBtn = document.getElementById("send");
-  if(sendBtn) {
-    sendBtn.addEventListener("click", () => {
-      const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'));
-      if (selected.length === 0) return alert("Please select services first.");
+    document.getElementById("summaryText").innerHTML = `
+      <p><b>Name:</b> ${name}</p>
+      <p><b>Time:</b> ${time}</p>
+      <ul>${selected.map(c => `<li>${c.dataset.name} - ${c.value} ${settings.currency}</li>`).join("")}</ul>
+      <p><b>Total:</b> ${total} ${settings.currency}</p>
+    `;
+    document.getElementById("summaryArea").hidden = false;
+  });
 
-      const name = document.getElementById("customerName").value || "Guest";
-      const time = document.getElementById("customerTime").value || "Not specified";
-      const total = document.getElementById("total").textContent;
+  /* =====================
+     💬 WHATSAPP
+  ====================== */
+  document.getElementById("send")?.addEventListener("click", () => {
+    const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')];
+    if (!selected.length) return alert("Please select services.");
 
-      let message = `*Booking Request - Pak Arabic Parlor*\n\n`;
-      message += `👤 *Name:* ${name}\n`;
-      message += `🕒 *Time:* ${time}\n\n`;
-      message += `*Services Selected:* \n`;
-      selected.forEach(c => {
-        message += `▫️ ${c.dataset.name} (${c.value} ${settings.currency})\n`;
-      });
-      message += `\n💰 *Total:* ${total} ${settings.currency}`;
+    const name = document.getElementById("customerName").value || "Guest";
+    const timeValue = document.getElementById("customerTime").value;
+    const time = timeValue
+      ? new Date(timeValue).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+      : "Not specified";
+    const total = document.getElementById("total").textContent;
 
-      const url = `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(message)}`;
-      window.open(url, "_blank");
-    });
-  }
+    let msg = `*Booking Request – Pak Arabic Parlor*\n\n`;
+    msg += `👤 Name: ${name}\n🕒 Time: ${time}\n\n*Services:*\n`;
+    selected.forEach(c => msg += `• ${c.dataset.name} (${c.value} ${settings.currency})\n`);
+    msg += `\n💰 Total: ${total} ${settings.currency}`;
 
-  const backBtn = document.getElementById("backToTop");
-  if(backBtn) {
+    window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank");
+  });
+
+  /* =====================
+     ⬆ BACK TO TOP
+  ====================== */
+  const backTop = document.getElementById("backToTop");
+  if (backTop) {
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) backBtn.style.display = "block";
-      else backBtn.style.display = "none";
+      backTop.style.display = window.scrollY > 300 ? "block" : "none";
     });
-    backBtn.addEventListener("click", () => {
+    backTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
