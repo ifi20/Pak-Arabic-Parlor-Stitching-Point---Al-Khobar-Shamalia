@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🌸 Pak Arabic Parlor & Stitching Point</title>
+  <title>🌙 Pak Arabic Parlor & Stitching Point ✨</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <header>
     <div>
-      <h1>🌸 Pak Arabic Parlor 🌸</h1>
+      <h1>🌙 Pak Arabic Parlor ✨</h1>
       <h2>Al Khobar Shamalia</h2>
     </div>
   </header>
@@ -33,7 +38,7 @@
   <section class="box info">
     <div><b>Timing:</b> 12:00 PM – 12:00 AM</div>
     <div><b>Call / WhatsApp:</b> +966-582617487</div>
-    <button id="locationBtn" type="button">📍 Open Our Salon Location</button>
+    <button id="locationBtn" type="button" class="accent-btn">📍 Open Our Salon Location</button>
   </section>
 
   <section class="box controls">
@@ -46,17 +51,19 @@
 
   <div id="serviceList" aria-live="polite"></div>
 
-  <section id="summaryArea" class="summary-box" aria-live="polite" hidden>
+  <section id="summaryArea" class="box summary-box" aria-live="polite" hidden>
     <h3>🧾 Booking Summary</h3>
     <div id="summaryText">No summary yet.</div>
   </section>
 
-  <section class="box controls">
+  <section class="box controls sticky-bottom">
     <div class="total">Total: <span id="total">0</span> SAR</div>
-    <button id="summary" type="button" class="secondary">🧾 View Summary</button>
-    <button id="send" type="button">Send to WhatsApp 💬</button>
-    <button id="clear" type="button" class="secondary">Clear Selections 🔄</button>
-    <p class="hint">Tip: Use search or filter by category. Press ✖ to clear search.</p>
+    <div class="button-group">
+      <button id="summary" type="button" class="secondary">🧾 View Summary</button>
+      <button id="send" type="button" class="primary">Send to WhatsApp 💬</button>
+    </div>
+    <button id="clear" type="button" class="text-btn">Clear Selections 🔄</button>
+    <p class="hint">Tip: Use search or filter by category.</p>
     <p id="jsonHint" class="hint" style="display:none; color: red;">
       Note: To load prices, please open this folder using a "Live Server" or place it on a web server.
     </p>
