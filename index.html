@@ -56,18 +56,9 @@
     <div id="summaryText">No summary yet.</div>
   </section>
 
-  <section class="box controls sticky-bottom">
-    <div class="total">Total: <span id="total">0</span> SAR</div>
-    <div class="button-group">
-      <button id="summary" type="button" class="secondary">🧾 View Summary</button>
-      <button id="send" type="button" class="primary">Send to WhatsApp 💬</button>
-    </div>
-    <button id="clear" type="button" class="text-btn">Clear Selections 🔄</button>
-    <p class="hint">Tip: Use search or filter by category.</p>
-    <p id="jsonHint" class="hint" style="display:none; color: red;">
-      Note: To load prices, please open this folder using a "Live Server" or place it on a web server.
-    </p>
-  </section>
+  <p id="jsonHint" style="display:none; color: red; text-align: center; padding: 10px;">
+    Note: To load prices, please open this folder using a "Live Server" or place it on a web server.
+  </p>
 
   <footer>
     Timing: 12:00 PM – 12:00 AM | Call / WhatsApp: +966-582617487
@@ -76,6 +67,15 @@
   <button id="backToTop" title="Go to top">⬆️</button>
   <a href="https://wa.me/966582617487" class="float-whatsapp" target="_blank" rel="noopener">💬</a>
   <a href="tel:+966582617487" class="float-call" rel="noopener">📞</a>
+
+  <section class="sticky-bottom" id="action-bar">
+    <div class="total-bar">Total: <span id="total">0</span> SAR</div>
+    <div class="button-group">
+      <button id="summary" type="button" class="secondary">🧾 Summary</button>
+      <button id="send" type="button" class="primary">WhatsApp 💬</button>
+    </div>
+    <button id="clear" type="button" class="text-btn">Clear Selections 🔄</button>
+  </section>
 
   <script src="script.js"></script>
 </body>
