@@ -13,9 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
      🎉 OFFER BANNER
   ====================== */
   const banner = document.querySelector(".banner");
-  const currentMonth = new Date().toLocaleString("en-US", { month: "long" });
   if (banner) {
-    banner.textContent = `✨ ${currentMonth} Glow Offer – ${settings.discountPercentage}% OFF All Services! ✨`;
+    banner.textContent = `✨ Your Ramadan Beauty Essentials, Now ${settings.discountPercentage}% Off on All Services! (Valid: Feb 18 – Mar 31) ✨`;
   }
 
   /* =====================
@@ -146,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (searchInput) {
       searchInput.addEventListener("input", e => {
         const term = e.target.value.toLowerCase();
-        clearSearch.style.display = term ? "block" : "none";
+        if (clearSearch) clearSearch.style.display = term ? "block" : "none";
 
         document.querySelectorAll(".service").forEach(row => {
           row.style.display = row.textContent.toLowerCase().includes(term)
@@ -184,11 +183,21 @@ document.addEventListener("DOMContentLoaded", () => {
   ====================== */
   document.getElementById("clear")?.addEventListener("click", () => {
     document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-    document.getElementById("customerName").value = "";
-    document.getElementById("customerTime").value = "";
-    document.getElementById("total").textContent = "0";
-    document.getElementById("summaryArea").hidden = true;
-    document.getElementById("summaryText").innerHTML = "No summary yet.";
+    
+    const customerName = document.getElementById("customerName");
+    if (customerName) customerName.value = "";
+    
+    const customerTime = document.getElementById("customerTime");
+    if (customerTime) customerTime.value = "";
+    
+    const total = document.getElementById("total");
+    if (total) total.textContent = "0";
+    
+    const summaryArea = document.getElementById("summaryArea");
+    if (summaryArea) summaryArea.hidden = true;
+    
+    const summaryText = document.getElementById("summaryText");
+    if (summaryText) summaryText.innerHTML = "No summary yet.";
   });
 
   /* =====================
@@ -205,20 +214,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')];
     if (!selected.length) return alert("Please select at least one service.");
 
-    const name = document.getElementById("customerName").value || "Valued Customer";
-    const timeValue = document.getElementById("customerTime").value;
+    const nameInput = document.getElementById("customerName");
+    const name = nameInput && nameInput.value ? nameInput.value : "Valued Customer";
+    
+    const timeInput = document.getElementById("customerTime");
+    const timeValue = timeInput ? timeInput.value : "";
     const time = timeValue
       ? new Date(timeValue).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
       : "Not selected";
-    const total = document.getElementById("total").textContent;
+      
+    const totalElem = document.getElementById("total");
+    const total = totalElem ? totalElem.textContent : "0";
 
-    document.getElementById("summaryText").innerHTML = `
-      <p><b>Name:</b> ${name}</p>
-      <p><b>Time:</b> ${time}</p>
-      <ul>${selected.map(c => `<li>${c.dataset.name} - ${c.value} ${settings.currency}</li>`).join("")}</ul>
-      <p><b>Total:</b> ${total} ${settings.currency}</p>
-    `;
-    document.getElementById("summaryArea").hidden = false;
+    const summaryText = document.getElementById("summaryText");
+    if (summaryText) {
+        summaryText.innerHTML = `
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Time:</b> ${time}</p>
+          <ul>${selected.map(c => `<li>${c.dataset.name} - ${c.value} ${settings.currency}</li>`).join("")}</ul>
+          <p><b>Total:</b> ${total} ${settings.currency}</p>
+        `;
+    }
+    
+    const summaryArea = document.getElementById("summaryArea");
+    if (summaryArea) summaryArea.hidden = false;
   });
 
   /* =====================
@@ -228,17 +247,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const selected = [...document.querySelectorAll('input[type="checkbox"]:checked')];
     if (!selected.length) return alert("Please select services.");
 
-    const name = document.getElementById("customerName").value || "Guest";
-    const timeValue = document.getElementById("customerTime").value;
+    const nameInput = document.getElementById("customerName");
+    const name = nameInput && nameInput.value ? nameInput.value : "Guest";
+    
+    const timeInput = document.getElementById("customerTime");
+    const timeValue = timeInput ? timeInput.value : "";
     const time = timeValue
       ? new Date(timeValue).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
       : "Not specified";
-    const total = document.getElementById("total").textContent;
+      
+    const totalElem = document.getElementById("total");
+    const total = totalElem ? totalElem.textContent : "0";
 
-    let msg = `*Booking Request – Pak Arabic Parlor*\n\n`;
+    let msg = `*🌙 Booking Request – Pak Arabic Parlor ✨*\n\n`;
     msg += `👤 Name: ${name}\n🕒 Time: ${time}\n\n*Services:*\n`;
     selected.forEach(c => msg += `• ${c.dataset.name} (${c.value} ${settings.currency})\n`);
-    msg += `\n💰 Total: ${total} ${settings.currency}`;
+    msg += `\n💰 Total: ${total} ${settings.currency}\n\n*Ramadan Offer Applied!*`;
 
     window.open(`https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent(msg)}`, "_blank");
   });
@@ -249,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const backTop = document.getElementById("backToTop");
   if (backTop) {
     window.addEventListener("scroll", () => {
-      backTop.style.display = window.scrollY > 300 ? "block" : "none";
+      backTop.style.display = window.scrollY > 300 ? "flex" : "none";
     });
     backTop.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -257,3 +281,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+                    
