@@ -1,27 +1,23 @@
 :root {
-  --bg: #fdfbf7; /* Cream */
+  --bg: #fdfbf7; 
   --card-bg: #ffffff;
-  --primary: #2d6a4f; /* Emerald Green */
+  --primary: #2d6a4f; 
   --primary-hover: #1b4332;
-  --accent: #d4af37; /* Gold */
+  --accent: #d4af37; 
   --accent-hover: #b5952f;
   --text-main: #2b2b2b;
   --text-muted: #666;
   --border: #e0e0e0;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--bg);
   color: var(--text-main);
   line-height: 1.6;
-  padding-bottom: 40px; 
+  padding-bottom: 160px; /* Space so content isn't hidden by the new bottom bar */
 }
 
 h1, h2, h3 {
@@ -45,7 +41,6 @@ header h1 {
 header h2 {
   color: #fff;
   font-size: 1.1rem;
-  font-family: 'Poppins', sans-serif;
   font-weight: 400;
 }
 
@@ -77,12 +72,6 @@ header h2 {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   border: 1px solid var(--border);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.box:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 .datetime { text-align: center; font-weight: 500; color: var(--primary); }
@@ -100,7 +89,6 @@ input[type="text"], input[type="datetime-local"], select {
   border-radius: 8px;
   font-family: 'Poppins', sans-serif;
   font-size: 1rem;
-  transition: border-color 0.3s;
 }
 
 input:focus, select:focus {
@@ -131,32 +119,16 @@ button {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  display: inline-block;
   width: 100%;
   margin-top: 10px;
+  transition: 0.2s;
 }
 
 button:active { transform: scale(0.98); }
 
-.primary, #send {
-  background-color: var(--primary);
-  color: white;
-}
-.primary:hover, #send:hover { background-color: var(--primary-hover); }
-
-.secondary, #summary {
-  background-color: transparent;
-  color: var(--primary);
-  border: 2px solid var(--primary);
-}
-.secondary:hover, #summary:hover { background-color: #eaf1ed; }
-
-.accent-btn {
-  background-color: var(--accent);
-  color: var(--primary);
-}
-.accent-btn:hover { background-color: var(--accent-hover); }
+.primary, #send { background-color: var(--primary); color: white; }
+.secondary, #summary { background-color: transparent; color: var(--primary); border: 2px solid var(--primary); }
+.accent-btn { background-color: var(--accent); color: var(--primary); }
 
 .text-btn {
   background: transparent;
@@ -175,41 +147,14 @@ button:active { transform: scale(0.98); }
 }
 .service:last-child { border-bottom: none; }
 
-.price {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+.price { display: flex; align-items: center; gap: 10px; }
+.old { text-decoration: line-through; color: var(--text-muted); font-size: 0.9em; }
+.new { font-weight: bold; color: var(--primary); }
+input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--primary); cursor: pointer; }
 
-.old {
-  text-decoration: line-through;
-  color: var(--text-muted);
-  font-size: 0.9em;
-}
+.summary-box { background: #eaffea; border-left: 5px solid var(--primary); }
 
-.new {
-  font-weight: bold;
-  color: var(--primary);
-}
-
-input[type="checkbox"] {
-  width: 22px;
-  height: 22px;
-  accent-color: var(--primary);
-  cursor: pointer;
-}
-
-.summary-box {
-  background: #eaffea;
-  border-left: 5px solid var(--primary);
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-}
+footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.9rem; }
 
 /* Floating Buttons */
 .float-whatsapp, .float-call, #backToTop {
@@ -225,81 +170,55 @@ footer {
   text-decoration: none;
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   z-index: 1000;
-  transition: transform 0.3s;
 }
-.float-whatsapp:hover, .float-call:hover, #backToTop:hover { transform: scale(1.1); }
 
-.float-whatsapp { bottom: 85px; right: 20px; background-color: #25D366; }
-.float-call { bottom: 145px; right: 20px; background-color: var(--primary); }
-#backToTop { bottom: 25px; right: 20px; background-color: var(--accent); display: none; border: none; cursor: pointer; color: var(--primary); }
+.float-whatsapp { bottom: 155px; right: 20px; background-color: #25D366; }
+.float-call { bottom: 215px; right: 20px; background-color: var(--primary); }
+#backToTop { bottom: 275px; right: 20px; background-color: var(--accent); display: none; border: none; cursor: pointer; color: var(--primary); }
 
-/* Optimized Slim Sticky Action Bar */
+/* COMPACT FIXED ACTION BAR FOR MOBILE */
 .sticky-bottom {
-  position: sticky;
+  position: fixed; 
   bottom: 0;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(8px);
-  padding: 10px 15px;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  padding: 10px 15px 15px 15px; 
   border-top: 3px solid var(--accent);
-  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.15);
+  z-index: 9999;
+  text-align: center;
 }
 
-.total {
+.sticky-bottom .total-bar {
   font-size: 1.2rem;
-  margin-bottom: 8px;
-  font-weight: bold;
+  font-weight: 700;
   color: var(--primary);
+  margin-bottom: 8px;
 }
 
-.button-group {
+.sticky-bottom .button-group {
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  flex-direction: row !important; 
+  justify-content: space-between;
+  gap: 10px;
   width: 100%;
 }
 
-.button-group button {
-  padding: 10px 5px;
-  font-size: 0.9rem;
-  margin-top: 0;
+.sticky-bottom .button-group button {
+  margin: 0 !important; 
+  padding: 10px;
   flex: 1;
+  font-size: 0.9rem;
 }
 
-#clear {
+.sticky-bottom #clear {
+  margin-top: 8px !important;
   font-size: 0.8rem;
-  margin-top: 5px;
-  padding: 2px;
+  padding: 5px;
 }
 
-.hint {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 5px;
-}
-
-/* Mobile Adjustments */
 @media (max-width: 600px) {
-  body { padding-bottom: 120px; } /* Ensures content isn't hidden behind slim sticky footer */
-  
   header h1 { font-size: 1.6rem; }
-  
-  .sticky-bottom { 
-    margin: 0; 
-    border-radius: 12px 12px 0 0; 
-    border-left: none; 
-    border-right: none;
-    border-bottom: none;
-  }
-  
-  .hint { display: none; } /* Hide hint on mobile to save vertical space */
-  
-  /* Pushing floating buttons up so they don't block the sticky bar */
-  .float-whatsapp { bottom: 130px; }
-  .float-call { bottom: 190px; }
-  #backToTop { bottom: 250px; }
-}
+      }
