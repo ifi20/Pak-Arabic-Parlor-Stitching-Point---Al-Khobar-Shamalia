@@ -199,37 +199,6 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-.sticky-bottom {
-  position: sticky;
-  bottom: 15px;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 2px solid var(--accent);
-}
-
-.total {
-  font-size: 1.5rem;
-  font-weight: bold;
-  text-align: center;
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-.button-group {
-  display: flex;
-  gap: 10px;
-}
-
-.button-group button { margin-top: 0; }
-
-.hint {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  margin-top: 10px;
-}
-
 .summary-box {
   background: #eaffea;
   border-left: 5px solid var(--primary);
@@ -264,18 +233,73 @@ footer {
 .float-call { bottom: 145px; right: 20px; background-color: var(--primary); }
 #backToTop { bottom: 25px; right: 20px; background-color: var(--accent); display: none; border: none; cursor: pointer; color: var(--primary); }
 
+/* Optimized Slim Sticky Action Bar */
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 10px 15px;
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.total {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+}
+
+.button-group button {
+  padding: 10px 5px;
+  font-size: 0.9rem;
+  margin-top: 0;
+  flex: 1;
+}
+
+#clear {
+  font-size: 0.8rem;
+  margin-top: 5px;
+  padding: 2px;
+}
+
+.hint {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+
+/* Mobile Adjustments */
 @media (max-width: 600px) {
-  .button-group { flex-direction: column; }
+  body { padding-bottom: 120px; } /* Ensures content isn't hidden behind slim sticky footer */
+  
+  header h1 { font-size: 1.6rem; }
+  
   .sticky-bottom { 
-    bottom: 0; 
+    margin: 0; 
     border-radius: 12px 12px 0 0; 
-    margin-bottom: 0; 
-    border-bottom: none; 
     border-left: none; 
     border-right: none;
-  }
-  body { padding-bottom: 240px; } /* Ensures content isn't hidden behind sticky footer */
-  .float-whatsapp { bottom: 240px; }
-  .float-call { bottom: 300px; }
+    border-bottom: none;
   }
   
+  .hint { display: none; } /* Hide hint on mobile to save vertical space */
+  
+  /* Pushing floating buttons up so they don't block the sticky bar */
+  .float-whatsapp { bottom: 130px; }
+  .float-call { bottom: 190px; }
+  #backToTop { bottom: 250px; }
+}
